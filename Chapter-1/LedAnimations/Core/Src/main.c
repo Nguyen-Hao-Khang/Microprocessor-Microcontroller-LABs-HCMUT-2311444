@@ -91,14 +91,42 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  GPIO_PinState state = GPIO_PIN_SET;
-  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,  state);
-  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, !state);
+  int TIME_REMAINING_RED = 5;
+  int TIME_REMAINING_YEL = 2;
+  int TIME_REMAINING_GRE = 3;
   while (1)
   {
-	  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
-	  HAL_GPIO_TogglePin(LED_YEL_GPIO_Port, LED_YEL_Pin);
-	  HAL_Delay(2000);
+	  if (TIME_REMAINING_RED >= 0)
+	  {
+		  TIME_REMAINING_RED--;
+		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, SET);
+		  HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, SET);
+	  }
+
+	  if (TIME_REMAINING_GRE >= 0 && TIME_REMAINING_RED < 0)
+	  {
+		  TIME_REMAINING_GRE--;
+		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
+		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, SET);
+		  HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, RESET);
+	  }
+
+	  if (TIME_REMAINING_YEL > 0 && TIME_REMAINING_GRE < 0 && TIME_REMAINING_RED < 0)
+	  {
+		  TIME_REMAINING_YEL--;
+		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
+		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, RESET);
+	      HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, SET);
+	  }
+
+	  if (TIME_REMAINING_YEL == 0)
+	  {
+		  TIME_REMAINING_RED = 5;
+		  TIME_REMAINING_YEL = 2;
+		  TIME_REMAINING_GRE = 3;
+	  }
+	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
     /* USER CODE BEGIN 3 */
@@ -154,10 +182,10 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YEL_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YEL_Pin|LED_GRE_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YEL_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YEL_Pin;
+  /*Configure GPIO pins : LED_RED_Pin LED_YEL_Pin LED_GRE_Pin */
+  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YEL_Pin|LED_GRE_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
