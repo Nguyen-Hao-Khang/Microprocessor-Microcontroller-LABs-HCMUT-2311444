@@ -91,41 +91,47 @@ int main(void)
 
   /* Infinite loop */
   /* USER CODE BEGIN WHILE */
-  int TIME_REMAINING_RED = 5;
-  int TIME_REMAINING_YEL = 2;
-  int TIME_REMAINING_GRE = 3;
+  /* TR 	 10 9  8  7  6  5  4  3  2  1  0  10
+   * X_axis: R  R  R  R  R  G  G  G  Y  Y  R  ...
+   * Y_axis: G  G  G  Y  Y  R  R  R  R  R  G  ...
+   */
+  int TIME_REMAINING = 10;
   while (1)
   {
-	  if (TIME_REMAINING_RED >= 0)
+	  if (TIME_REMAINING > 7)
 	  {
-		  TIME_REMAINING_RED--;
-		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, RESET);
-		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, SET);
-		  HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, SET);
+		  // Y axis
+		  HAL_GPIO_WritePin(LED_RED_Y_GPIO_Port, LED_RED_Y_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_YEL_Y_GPIO_Port, LED_YEL_Y_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_GRE_Y_GPIO_Port, LED_GRE_Y_Pin, SET);
+		  // X axis
+		  HAL_GPIO_WritePin(LED_RED_X_GPIO_Port, LED_RED_X_Pin, SET);
+		  HAL_GPIO_WritePin(LED_YEL_X_GPIO_Port, LED_YEL_X_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_GRE_X_GPIO_Port, LED_GRE_X_Pin, RESET);
 	  }
-
-	  if (TIME_REMAINING_GRE >= 0 && TIME_REMAINING_RED < 0)
+	  else if (TIME_REMAINING <= 7 && TIME_REMAINING > 5)
 	  {
-		  TIME_REMAINING_GRE--;
-		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
-		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, SET);
-		  HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_RED_Y_GPIO_Port, LED_RED_Y_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_YEL_Y_GPIO_Port, LED_YEL_Y_Pin, SET);
+		  HAL_GPIO_WritePin(LED_GRE_Y_GPIO_Port, LED_GRE_Y_Pin, RESET);
 	  }
-
-	  if (TIME_REMAINING_YEL > 0 && TIME_REMAINING_GRE < 0 && TIME_REMAINING_RED < 0)
+	  else if (TIME_REMAINING <= 5 && TIME_REMAINING > 2)
 	  {
-		  TIME_REMAINING_YEL--;
-		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
-		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, RESET);
-	      HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, SET);
+		  HAL_GPIO_WritePin(LED_RED_X_GPIO_Port, LED_RED_X_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_YEL_X_GPIO_Port, LED_YEL_X_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_GRE_X_GPIO_Port, LED_GRE_X_Pin, SET);
+		  HAL_GPIO_WritePin(LED_RED_Y_GPIO_Port, LED_RED_Y_Pin, SET);
+		  HAL_GPIO_WritePin(LED_YEL_Y_GPIO_Port, LED_YEL_Y_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_GRE_Y_GPIO_Port, LED_GRE_Y_Pin, RESET);
 	  }
-
-	  if (TIME_REMAINING_YEL == 0)
+	  else
 	  {
-		  TIME_REMAINING_RED = 5;
-		  TIME_REMAINING_YEL = 2;
-		  TIME_REMAINING_GRE = 3;
+		  HAL_GPIO_WritePin(LED_RED_X_GPIO_Port, LED_RED_X_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_YEL_X_GPIO_Port, LED_YEL_X_Pin, SET);
+		  HAL_GPIO_WritePin(LED_GRE_X_GPIO_Port, LED_GRE_X_Pin, RESET);
 	  }
+	  TIME_REMAINING--;
+	  if (TIME_REMAINING <= 0) TIME_REMAINING = 10;
 	  HAL_Delay(1000);
     /* USER CODE END WHILE */
 
@@ -182,10 +188,13 @@ static void MX_GPIO_Init(void)
   __HAL_RCC_GPIOA_CLK_ENABLE();
 
   /*Configure GPIO pin Output Level */
-  HAL_GPIO_WritePin(GPIOA, LED_RED_Pin|LED_YEL_Pin|LED_GRE_Pin, GPIO_PIN_RESET);
+  HAL_GPIO_WritePin(GPIOA, LED_RED_X_Pin|LED_YEL_X_Pin|LED_GRE_X_Pin|LED_RED_Y_Pin
+                          |LED_YEL_Y_Pin|LED_GRE_Y_Pin, GPIO_PIN_RESET);
 
-  /*Configure GPIO pins : LED_RED_Pin LED_YEL_Pin LED_GRE_Pin */
-  GPIO_InitStruct.Pin = LED_RED_Pin|LED_YEL_Pin|LED_GRE_Pin;
+  /*Configure GPIO pins : LED_RED_X_Pin LED_YEL_X_Pin LED_GRE_X_Pin LED_RED_Y_Pin
+                           LED_YEL_Y_Pin LED_GRE_Y_Pin */
+  GPIO_InitStruct.Pin = LED_RED_X_Pin|LED_YEL_X_Pin|LED_GRE_X_Pin|LED_RED_Y_Pin
+                          |LED_YEL_Y_Pin|LED_GRE_Y_Pin;
   GPIO_InitStruct.Mode = GPIO_MODE_OUTPUT_PP;
   GPIO_InitStruct.Pull = GPIO_NOPULL;
   GPIO_InitStruct.Speed = GPIO_SPEED_FREQ_LOW;
