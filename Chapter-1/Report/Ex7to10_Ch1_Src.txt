@@ -1,0 +1,84 @@
+void clearAllClock()
+{
+	  for (int i = 0;  i < 12; i++)
+	  {
+		  HAL_GPIO_WritePin(GPIOA, ledPins[i], RESET);
+	  }
+}
+void setNumberOnClock(int num)
+{
+	  if (num >= 0 && num <= 11)
+	  {
+		  HAL_GPIO_WritePin(GPIOA, ledPins[num], SET);
+	  }
+}
+void clearNumberOnClock(int num)
+{
+	  if (num >= 0 && num <= 11)
+	  {
+		  HAL_GPIO_WritePin(GPIOA, ledPins[num], RESET);
+	  }
+}
+
+
+  int hour = 0, minute = 0, second = 0;
+  int prev_hour = -1, prev_minute = -1, prev_second = -1;
+  int curr_hour, curr_minute, curr_second;
+  clearAllClock();
+  while (1)
+  {
+	  curr_hour   = hour;
+	  curr_minute = minute / 5;
+	  curr_second = second / 5;
+
+	  if (curr_second != prev_second)
+	  {
+		  if (prev_second != -1
+		   && prev_second != curr_minute
+		   && prev_second != curr_hour)
+		  {
+			  clearNumberOnClock(prev_second);
+		  }
+		  setNumberOnClock(curr_second);
+		  prev_second = curr_second;
+	  }
+	  if (curr_minute != prev_minute)
+	  {
+		  if (prev_minute != -1
+		   && prev_minute != curr_second
+		   && prev_minute != curr_hour)
+		  {
+			  clearNumberOnClock(prev_minute);
+		  }
+		  setNumberOnClock(curr_minute);
+		  prev_minute = curr_minute;
+	  }
+	  if (curr_hour != prev_hour)
+	  {
+		  if (prev_hour != -1
+		   && prev_hour != curr_minute
+		   && prev_hour != curr_second)
+		  {
+			  clearNumberOnClock(prev_hour);
+		  }
+		  setNumberOnClock(curr_hour);
+		  prev_hour = curr_hour;
+	  }
+
+      second++;
+      if (second == 60)
+      {
+          second = 0;
+          minute++;
+      }
+      if (minute == 60)
+      {
+          minute = 0;
+          hour++;
+      }
+      if (hour == 12)
+      {
+          hour = 0;
+      }
+      HAL_Delay(10);
+ }
