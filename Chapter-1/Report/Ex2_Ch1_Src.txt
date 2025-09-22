@@ -1,0 +1,37 @@
+  int TIME_REMAINING_RED = 5;
+  int TIME_REMAINING_YEL = 2;
+  int TIME_REMAINING_GRE = 3;
+  while (1)
+  {
+	  if (TIME_REMAINING_RED >= 0)
+	  {
+		  TIME_REMAINING_RED--;
+		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, SET);
+		  HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, SET);
+	  }
+
+	  if (TIME_REMAINING_GRE >= 0 && TIME_REMAINING_RED < 0)
+	  {
+		  TIME_REMAINING_GRE--;
+		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
+		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, SET);
+	      HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, RESET);
+	  }
+
+	  if (TIME_REMAINING_YEL >= 0 && TIME_REMAINING_GRE < 0 && TIME_REMAINING_RED < 0)
+	  {
+		  TIME_REMAINING_YEL--;
+		  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin, SET);
+		  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, RESET);
+		  HAL_GPIO_WritePin(LED_GRE_GPIO_Port, LED_GRE_Pin, SET);
+	  }
+
+	  if (TIME_REMAINING_YEL == 0)
+	  {
+		  TIME_REMAINING_RED = 5;
+		  TIME_REMAINING_YEL = 2;
+		  TIME_REMAINING_GRE = 3;
+	  }
+	  HAL_Delay(1000);
+  }
