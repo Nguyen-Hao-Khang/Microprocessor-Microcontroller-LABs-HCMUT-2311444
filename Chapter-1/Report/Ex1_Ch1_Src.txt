@@ -1,0 +1,9 @@
+  GPIO_PinState state = GPIO_PIN_SET;
+  HAL_GPIO_WritePin(LED_RED_GPIO_Port, LED_RED_Pin,  state);
+  HAL_GPIO_WritePin(LED_YEL_GPIO_Port, LED_YEL_Pin, !state);
+  while (1)
+  {
+	  HAL_GPIO_TogglePin(LED_RED_GPIO_Port, LED_RED_Pin);
+	  HAL_GPIO_TogglePin(LED_YEL_GPIO_Port, LED_YEL_Pin);
+	  HAL_Delay(2000);
+ }
