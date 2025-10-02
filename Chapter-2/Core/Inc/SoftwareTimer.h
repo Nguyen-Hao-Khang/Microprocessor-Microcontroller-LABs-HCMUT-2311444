@@ -9,7 +9,7 @@
 #define INC_SOFTWARETIMER_H_
 
 
-#define NUM_TASKS 1
+#define NUM_TASKS 2
 extern int timer_flag[NUM_TASKS];
 
 
