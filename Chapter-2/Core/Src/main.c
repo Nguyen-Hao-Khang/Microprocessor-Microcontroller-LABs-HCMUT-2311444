@@ -254,6 +254,121 @@ void updateLEDMatrix(int index)
     default: break;
     }
 }
+
+
+uint8_t animation_frames[][8] = {
+		{0b00011000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000}, // Frame 0
+
+		{0b00111100,
+		 0b00011000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000}, // Frame 1
+
+		{0b01111110,
+		 0b00111100,
+		 0b00011000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000}, // Frame 2
+
+		{0b11111111,
+		 0b01111110,
+		 0b00111100,
+		 0b00011000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000}, // Frame 3
+
+		{0b11111111,
+		 0b11111111,
+		 0b01111110,
+		 0b00111100,
+		 0b00011000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000}, // Frame 4
+
+		{0b01100110,
+		 0b11111111,
+		 0b11111111,
+		 0b01111110,
+		 0b00111100,
+		 0b00011000,
+		 0b00000000,
+		 0b00000000}, // Frame 5
+
+
+		{0b00000000,
+		 0b01100110,
+		 0b11111111,
+		 0b11111111,
+		 0b01111110,
+		 0b00111100,
+		 0b00011000,
+		 0b00000000}, // Frame 6
+
+		{0b00000000,
+		 0b11000011,
+		 0b11100111,
+		 0b11100111,
+		 0b11100111,
+		 0b01100110,
+		 0b00100100,
+		 0b00000000}, // Frame 7
+
+		{0b00000000,
+		 0b10000001,
+		 0b11000011,
+		 0b11000011,
+		 0b11000011,
+		 0b11000011,
+		 0b01000010,
+		 0b00000000}, // Frame 8
+
+		{0b00000000,
+		 0b00000000,
+		 0b10000001,
+		 0b10000001,
+		 0b10000001,
+		 0b10000001,
+		 0b10000001,
+		 0b00000000}, // Frame 9
+
+		{0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000,
+		 0b00000000}, // Frame 10
+};
+
+int current_frame = 0;
+int total_frames = sizeof(animation_frames)/sizeof(animation_frames[0]);
+uint16_t frame_delays[] = {100, 100, 100, 100, 100, 100, 500, 80, 80, 80, 80};
+void updateAnimation()
+{
+	for (int i = 0; i < 8; i++)
+	{
+		matrix_buffer[i] = animation_frames[current_frame][i];
+	}
+	current_frame = (current_frame + 1)%total_frames;
+}
 /* USER CODE END 0 */
 
 /**
@@ -293,7 +408,8 @@ int main(void)
   /* USER CODE BEGIN WHILE */
   setTimer(0, 10);
   setTimer(1, 25);
-  setTimer(2, 4);
+  setTimer(2, 40);
+  setTimer(3, 30);
   while (1)
   {
 	  updateClockBuffer();
@@ -321,16 +437,22 @@ int main(void)
 
 	  if (timer_flag[1] == 1)
 	  {
-		  setTimer(1, 25);
+		  setTimer(1, 50);
 		  update7SEG(index_led++);
 		  if (index_led >= 4) index_led = 0;
 	  }
 
 	  if (timer_flag[2] == 1)
 	  {
-		  setTimer(2, 4);
+		  setTimer(2, 2);
 		  updateLEDMatrix(index_led_matrix++);
 		  if (index_led_matrix >= 8) index_led_matrix = 0;
+	  }
+
+	  if (timer_flag[3] == 1)
+	  {
+		  setTimer(3, frame_delays[current_frame]);
+		  updateAnimation();
 	  }
     /* USER CODE END WHILE */
 
