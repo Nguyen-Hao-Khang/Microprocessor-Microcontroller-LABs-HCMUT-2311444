@@ -9,7 +9,7 @@
 
 int timer_counter[NUM_TASKS] = {0};
 int timer_flag[NUM_TASKS] = {0};
-int TIMER_CYCLE = 10;
+int TIMER_CYCLE = 1;
 
 
 void setTimer(int task_id, int duration)
