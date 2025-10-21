@@ -4,14 +4,33 @@
  *  Created on: Oct 16, 2025
  *      Author: nguye
  */
-#include "main.h"
-#include "input_reading.h"
+#include "timer.h"
 
-void HAL_TIM_PeriodElapsedCallback(TIM_HandleTypeDef *htim)
+
+void setTimer(int task_id, int duration)
 {
-	if(htim->Instance == TIM2)
+	if (task_id >= 0 && task_id < NUM_TASKS)
 	{
-		button_reading();
+		timer_counter[task_id] = duration/TIMER_CYCLE;
+		timer_flag[task_id] = 0;
 	}
 }
+
+
+void timerRun()
+{
+	for (int i = 0; i < NUM_TASKS; i++)
+	{
+		if (timer_counter[i] > 0)
+		{
+			timer_counter[i]--;
+			if (timer_counter[i] <= 0)
+			{
+				timer_flag[i] = 1;
+			}
+		}
+	}
+}
+
+
 

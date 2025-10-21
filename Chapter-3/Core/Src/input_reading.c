@@ -4,15 +4,10 @@
  *  Created on: Oct 16, 2025
  *      Author: nguye
  */
-
 #include "main.h"
+#include "input_reading.h"
 
-#define N0_OF_BUTTONS 1
 
-// Pass 1s with 100 timer interrupt 10ms
-#define DURATION_FOR_AUTO_INCREASING 100
-#define BUTTON_IS_PRESSED GPIO_PIN_RESET
-#define BUTTON_IS_RELEASED GPIO_PIN_SET
 
 // Debouncing
 static GPIO_PinState buttonBuffer[N0_OF_BUTTONS];
@@ -25,11 +20,28 @@ static uint8_t flagForButtonPress1s[N0_OF_BUTTONS];
 //after the button is pressed more than 1 second.
 static uint16_t counterForButtonPress1s[N0_OF_BUTTONS];
 
+
+GPIO_PinState read_button(int index)
+{
+    switch (index)
+    {
+        case 0:
+        	return HAL_GPIO_ReadPin(BTN1_GPIO_Port, BTN1_Pin);
+        case 1:
+        	return HAL_GPIO_ReadPin(BTN2_GPIO_Port, BTN2_Pin);
+        case 2:
+        	return HAL_GPIO_ReadPin(BTN3_GPIO_Port, BTN3_Pin);
+        default:
+        	return GPIO_PIN_SET;
+    }
+}
+
+
 void button_reading(void) {
-	for (char i = 0; i < N0_OF_BUTTONS; i++)
+	for (uint8_t i = 0; i < N0_OF_BUTTONS; i++)
 	{
 		debounceButtonBuffer2[i] = debounceButtonBuffer1[i];
-		debounceButtonBuffer1[i] = HAL_GPIO_ReadPin(BUTTON_1_GPIO_Port, BUTTON_1_Pin);
+		debounceButtonBuffer1[i] = read_button(i);
 		if (debounceButtonBuffer1[i] == debounceButtonBuffer2[i])
 		{
 			buttonBuffer[i] = debounceButtonBuffer1[i];
@@ -52,13 +64,13 @@ void button_reading(void) {
 	}
 }
 
-unsigned char is_button_pressed(uint8_t index) {
+unsigned int is_button_pressed(unsigned int index) {
 	if(index >= N0_OF_BUTTONS) return 0;
 	return (buttonBuffer[index] == BUTTON_IS_PRESSED);
 }
 
 
-unsigned char is_button_pressed_1s(unsigned char index){
-	if(index >= N0_OF_BUTTONS) return 0xff;
+unsigned int is_button_pressed_1s(unsigned int index){
+	if(index >= N0_OF_BUTTONS) return 0;
 	return (flagForButtonPress1s[index] == 1);
 }
