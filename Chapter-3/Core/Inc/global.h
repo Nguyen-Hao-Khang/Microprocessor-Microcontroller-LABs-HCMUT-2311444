@@ -43,7 +43,7 @@ extern int timerFlash;   	// TIM (ms) for flashing leds (task 0, 4)
 extern int timerScan;		// TIM (ms) for scaning 6 seven-segments (task 1)
 extern int timer1sec;		// TIM (ms) for countdown every 1 second (task 2)
 extern int timeOut;			// TIM (ms) for time out (task 3)
-extern int timerConfig;		// variable config time remaining (s) for mode 2,3,4
+
 
 
 // 7SEG SCANNING

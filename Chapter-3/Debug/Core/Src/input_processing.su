@@ -1,7 +1,9 @@
-input_processing.c:19:6:move_to_MODE1	8	static
-input_processing.c:55:6:toggle_previous_status	8	static
-input_processing.c:82:6:increase_tr_with_mode	4	static
-input_processing.c:138:6:restore_time_remaining	4	static
-input_processing.c:161:6:continue_previous_status	4	static
-input_processing.c:185:6:processing_time_remaining	4	static
-input_processing.c:213:6:fsm_for_input_processing	8	static
+input_processing.c:20:6:save_tr_previous_status	4	static
+input_processing.c:43:6:move_to_MODE1	8	static
+input_processing.c:80:6:toggle_previous_status	8	static
+input_processing.c:107:6:increase_tr_with_mode	4	static
+input_processing.c:156:6:update_tr_config	4	static
+input_processing.c:199:6:restore_time_remaining	4	static
+input_processing.c:222:6:continue_previous_status	4	static
+input_processing.c:246:6:processing_time_remaining	4	static
+input_processing.c:274:6:fsm_for_input_processing	8	static
