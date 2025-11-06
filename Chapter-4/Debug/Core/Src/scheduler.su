@@ -1,0 +1,11 @@
+scheduler.c:19:6:SCH_Init	16	static
+scheduler.c:81:9:SCH_Add_Task	40	static
+scheduler.c:116:6:SCH_Update	16	static
+scheduler.c:137:6:SCH_Dispatch_Tasks	40	static
+scheduler.c:158:10:SCH_Delete_Task	32	static
+scheduler.c:219:6:SCH_Go_To_Sleep	8	static
+scheduler.c:225:6:SCH_Report_Status	4	static
+scheduler.c:246:6:Watchdog_Refresh	8	static
+scheduler.c:250:9:Is_Watchdog_Reset	4	static
+scheduler.c:254:6:Watchdog_Counting	4	static
+scheduler.c:258:6:Reset_Watchdog_Counting	4	static
