@@ -1,0 +1,2 @@
+command_communication.c:13:6:send_uart	16	static
+command_communication.c:17:6:uart_communication_fsm	8	static
